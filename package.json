@@ -1,0 +1,14 @@
+{
+  "name": "dermascan-cloud-computing",
+  "version": "1.0.0",
+  "description": "Ini adalah Backend service dari aplikasi DermaScan ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Cloud Computing DermaScan",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}

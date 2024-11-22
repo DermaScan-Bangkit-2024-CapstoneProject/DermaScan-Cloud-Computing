@@ -1,30 +1,20 @@
 import db from "../database/connect-db.js";
-const userEmail = "user1@gmail.com";
-const signup = async (req, res) => {
+// const userEmail = "user1@gmail.com";
+import userService from "../service/user-service.js";
+const signup = async (req, res, next) => {
     try {
-        if (userEmail === "user2@gmail.com") {
-            res.status(400).send({
-                message: "User already exists",
-            });
-            return;
-        }
-        const userData = await db.collection("users").doc(userEmail).set({
-            name: "Udin Purwantio",
-            age: 22,
-            college: "UMB",
-            email: userEmail,
-            password: "123456",
-        });
+        const result = await userService.signup(req);
 
-        res.status(201).send({
+        res.status(201).json({
             message: "User Successfully Created",
+            data: result,
         });
     } catch (error) {
-        res.status(500).send({ message: error.message });
+        next(error);
     }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     try {
         const dataLogin = {
             email: userEmail,
@@ -43,11 +33,11 @@ const login = async (req, res) => {
             token: "xyahs7236",
         });
     } catch (error) {
-        res.status(500).send({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
-const get = async (req, res) => {
+const get = async (req, res, next) => {
     let userData = [];
     const usersCollection = db.collection("users");
     // const usersDoc = await usersCollection.get();
@@ -67,7 +57,7 @@ const get = async (req, res) => {
     }
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
     let data = [];
     try {
         const usersCollection = db.collection("users");
@@ -83,7 +73,7 @@ const update = async (req, res) => {
             data: data.at(0),
         });
     } catch (error) {
-        res.status(500).send({
+        res.status(500).json({
             message: {
                 error: error.message,
             },
@@ -91,8 +81,8 @@ const update = async (req, res) => {
     }
 };
 
-const logout = (req, res) => {
-    res.send("logout");
+const logout = (req, res, next) => {
+    res.json("logout");
 };
 
 export default { update, login, signup, logout, get };

@@ -82,7 +82,9 @@ const update = async (req, res, next) => {
 };
 
 const logout = (req, res, next) => {
-    res.json("logout");
+    res.json({
+        message: "Logout Successfully",
+    });
 };
 
 export default { update, login, signup, logout, get };

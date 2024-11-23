@@ -79,7 +79,7 @@ status code: <span style="color:#03ab22;">200</span>
         "email": "string",
         "phone": "string",
         "city": "string",
-        "country": "string"
+        "country": "string",
     },
     "token": "<jwt-token>"
 }

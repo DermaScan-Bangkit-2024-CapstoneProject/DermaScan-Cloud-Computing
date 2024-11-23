@@ -1,5 +1,5 @@
 import db from "../database/connect-db.js";
-// const userEmail = "user1@gmail.com";
+
 import userService from "../service/user-service.js";
 const signup = async (req, res, next) => {
     try {
@@ -16,24 +16,14 @@ const signup = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     try {
-        const dataLogin = {
-            email: userEmail,
-            password: "123456",
-        };
-        const usersCollection = db.collection("users");
-        const usersDoc = await usersCollection.where("email", "=", dataLogin.email).get();
-        if (usersDoc.empty) {
-            res.status(404).json({
-                message: "Data not found",
-            });
-            return;
-        }
+        const result = await userService.login(req);
         res.status(200).json({
             message: "Login Successfully",
-            token: "xyahs7236",
+            data: result.userData,
+            token: result.token,
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        next(error);
     }
 };
 
@@ -58,19 +48,20 @@ const get = async (req, res, next) => {
 };
 
 const update = async (req, res, next) => {
-    let data = [];
+    // let data = [];
     try {
-        const usersCollection = db.collection("users");
-        const userData = await usersCollection.doc(userEmail).update({
-            age: 30,
-        });
-        const updatedData = await usersCollection.where("email", "=", userEmail).get();
-        updatedData.forEach((doc) => {
-            data.push(doc.data());
-        });
-        res.status(201).json({
+        //     const usersCollection = db.collection("users");
+        //     const userData = await usersCollection.doc(userEmail).update({
+        //         age: 30,
+        //     });
+        //     const updatedData = await usersCollection.where("email", "=", userEmail).get();
+        //     updatedData.forEach((doc) => {
+        //         data.push(doc.data());
+        //     });
+        res.status(200).json({
             message: "User Successfully Updated",
-            data: data.at(0),
+            data: req.userData,
+            // data: data.at(0),
         });
     } catch (error) {
         res.status(500).json({

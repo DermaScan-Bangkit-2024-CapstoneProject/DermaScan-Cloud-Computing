@@ -77,4 +77,28 @@ const logout = async (req) => {
     return result;
 };
 
-export default { signup, login, logout };
+const getUser = async (req) => {
+    const userEmail = req.params.email;
+    if (userEmail !== req.userData) {
+        throw new ResponseError(401, "Unauthorized");
+    }
+    const usersCollection = db.collection("users");
+    const usersDoc = await usersCollection.where("email", "=", userEmail).get(); //query data user by email
+    if (usersDoc.empty) {
+        throw new ResponseError(404, "User not found");
+    }
+    const result = usersDoc.docs.map((doc) => doc.data())[0];
+    const date = new Date(result.created_at._seconds * 1000).toLocaleString();
+    const userData = {
+        name: result.name,
+        email: result.email,
+        age: result.age,
+        phone: result.phone,
+        city: result.city,
+        country: result.country,
+        created_at: date,
+    };
+    return userData;
+};
+
+export default { signup, login, logout, getUser };

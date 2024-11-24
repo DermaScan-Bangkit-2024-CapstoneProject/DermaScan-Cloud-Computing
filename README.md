@@ -78,7 +78,7 @@ status code: <span style="color:#03ab22;">200</span>
         "email": "string",
         "phone": "string",
         "city": "string",
-        "country": "string",
+        "country": "string"
     },
     "token": "<jwt-token>"
 }
@@ -228,11 +228,13 @@ status code: <span style="color:#03ab22;">200</span>
 
 ```json
 {
-    "id": "number",
     "name": "string",
     "email": "string",
-    "createdAt": "timestamp",
-    "updatedAt": "timestamp"
+    "age": "number",
+    "phone": "string",
+    "city": "string",
+    "country": "string",
+    "created_at": "timestamp"
 }
 ```
 

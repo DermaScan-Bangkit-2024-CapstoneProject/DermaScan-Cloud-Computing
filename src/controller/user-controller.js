@@ -39,23 +39,30 @@ const logout = (req, res, next) => {
     }
 };
 
-const get = async (req, res, next) => {
-    let userData = [];
-    const usersCollection = db.collection("users");
-    // const usersDoc = await usersCollection.get();
-    const usersDoc = await usersCollection.where("email", "=", userEmail).get(); //query data user by college
-    if (usersDoc.empty) {
-        res.status(404).json({
-            message: "Data not found",
-        });
-        return;
-    } else {
-        usersDoc.forEach((doc) => {
-            userData.push(doc.data());
-        });
-        res.json({
-            userData,
-        });
+const getUser = async (req, res, next) => {
+    // let userData = [];
+    // const usersCollection = db.collection("users");
+    // const usersDoc = await usersCollection.where("email", "=", userEmail).get(); //query data user by college
+    // if (usersDoc.empty) {
+    //     res.status(404).json({
+    //         message: "Data not found",
+    //     });
+    //     return;
+    // } else {
+    //     usersDoc.forEach((doc) => {
+    //         userData.push(doc.data());
+    //     });
+    //     res.json({
+    //         userData,
+    //     });
+    // }
+
+    try {
+        const userData = await userService.getUser(req);
+
+        res.status(200).json(userData);
+    } catch (error) {
+        next(error);
     }
 };
 
@@ -79,4 +86,4 @@ const update = async (req, res, next) => {
     }
 };
 
-export default { signup, login, logout, get, update };
+export default { signup, login, logout, getUser, update };

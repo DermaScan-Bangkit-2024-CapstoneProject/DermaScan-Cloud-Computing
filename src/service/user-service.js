@@ -4,6 +4,8 @@ import { ResponseError } from "../error/error.js";
 import { getUserData } from "../utils/get-user-data.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import admin from "firebase-admin";
+
 const signup = async (req) => {
     const user = req.body;
 
@@ -22,6 +24,8 @@ const signup = async (req) => {
         phone: user.phone,
         city: user.city,
         country: user.country,
+        auth_key: "null",
+        created_at: admin.firestore.Timestamp.now(),
     };
     const result = await usersCollection.doc(user.email).set(userData);
     return result;
@@ -52,16 +56,25 @@ const login = async (req) => {
         country: result.country,
     };
     const secret_key = process.env.JWT_SECRET_KEY;
-    const expiresIn = 60 * 60 * 1;
-    const authToken = crypto.randomBytes(50).toString("hex");
+    // const expiresIn = 60 * 60 * 5;
+    const expiresIn = "30m";
+    const authkey = crypto.randomBytes(50).toString("hex");
     const updatedData = await usersCollection.doc(dataLogin.email).update({
-        authToken: authToken,
+        auth_key: authkey,
     });
-    const token = jwt.sign({ email: result.email, authToken }, secret_key, { expiresIn: expiresIn });
+    const token = jwt.sign({ email: result.email, authkey }, secret_key, { expiresIn: expiresIn });
     return {
         userData,
         token,
     };
 };
 
-export default { signup, login };
+const logout = async (req) => {
+    const usersCollection = db.collection("users");
+    const result = await usersCollection.doc(req.userData).update({
+        auth_key: "null",
+    });
+    return result;
+};
+
+export default { signup, login, logout };

@@ -27,6 +27,18 @@ const login = async (req, res, next) => {
     }
 };
 
+const logout = (req, res, next) => {
+    try {
+        const result = userService.logout(req);
+        res.status(200).json({
+            message: "Logout Successfully",
+            data: result,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 const get = async (req, res, next) => {
     let userData = [];
     const usersCollection = db.collection("users");
@@ -61,21 +73,10 @@ const update = async (req, res, next) => {
         res.status(200).json({
             message: "User Successfully Updated",
             data: req.userData,
-            // data: data.at(0),
         });
     } catch (error) {
-        res.status(500).json({
-            message: {
-                error: error.message,
-            },
-        });
+        next(error);
     }
 };
 
-const logout = (req, res, next) => {
-    res.json({
-        message: "Logout Successfully",
-    });
-};
-
-export default { update, login, signup, logout, get };
+export default { signup, login, logout, get, update };

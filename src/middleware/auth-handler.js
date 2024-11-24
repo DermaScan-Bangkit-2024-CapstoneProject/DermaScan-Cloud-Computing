@@ -1,23 +1,29 @@
 import jwt from "jsonwebtoken";
 import { ResponseError } from "../error/error.js";
+import db from "../database/connect-db.js";
 
-const userAuth = (req, res, next) => {
+const userAuth = async (req, res, next) => {
     const { authorization } = req.headers;
     if (!authorization) {
-        throw new ResponseError(401, "Unauthorized");
+        return next(new ResponseError(401, "Unauthorized"));
     }
-
     const token = authorization.split(" ")[1];
     const secret_key = process.env.JWT_SECRET_KEY;
-
+    let jwtTokenDecode;
     try {
-        const jwtTokenDecode = jwt.verify(token, secret_key);
-        if (typeof jwtTokenDecode !== "string") {
-            req.userData = jwtTokenDecode;
-        }
+        jwtTokenDecode = jwt.verify(token, secret_key);
     } catch (error) {
-        throw new ResponseError(500, "Internal Server Error");
+        return next(new ResponseError(401, "Unauthorized"));
     }
+    const usersCollection = db.collection("users");
+    const usersDoc = await usersCollection.where("email", "=", jwtTokenDecode.email).get();
+    if (usersDoc.empty) {
+        return next(new ResponseError(401, "Unauthorized"));
+    }
+    if (usersDoc.docs.at(0).data().auth_key !== jwtTokenDecode.authkey) {
+        return next(new ResponseError(401, "Unauthorized"));
+    }
+    req.userData = jwtTokenDecode.email;
     next();
 };
 

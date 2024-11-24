@@ -34,8 +34,7 @@ Register a new user.
     "password": "string",
     "phone": "string",
     "city": "string",
-    "country": "string",
-    "created_at": "timestamp"
+    "country": "string"
 }
 ```
 
@@ -106,7 +105,7 @@ status code: <span style="color:#03ab22;">200</span>
 
 ```json
 {
-    "message": "User logged out successfully."
+    "message": "User logged out successfully"
 }
 ```
 

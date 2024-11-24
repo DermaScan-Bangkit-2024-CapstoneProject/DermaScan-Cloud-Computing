@@ -31,7 +31,7 @@ const logout = (req, res, next) => {
     try {
         const result = userService.logout(req);
         res.status(200).json({
-            message: "Logout Successfully",
+            message: "User logged out successfully",
             data: result,
         });
     } catch (error) {

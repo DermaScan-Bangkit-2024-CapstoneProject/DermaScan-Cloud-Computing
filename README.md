@@ -175,7 +175,7 @@ status code: <span style="color:#03ab22;">200</span>
 ### **6. Update User Data**
 
 **Endpoint**:  
-`PATCH /api/users/{user-email}`
+`PATCH /api/users/:user_email`
 
 **Description**:  
 Update user profile data.
@@ -329,7 +329,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **1. Add Read History**
 
 **Endpoint**:  
-`POST /users/:user-email/history/read`
+`POST /users/:user_email/history/read`
 
 **Description**:  
 Add a read history record for a user.
@@ -362,7 +362,7 @@ status code: <span style="color:#03ab22;">201</span>
 #### **2. Get Read Histories**
 
 **Endpoint**:  
-`GET /users/:user-email/history/read`
+`GET /users/:user_email/history/read`
 
 **Description**:  
 Retrieve a user's read histories.
@@ -394,7 +394,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **3. Delete Read History**
 
 **Endpoint**:  
-`DELETE /users/:user-email/history/read/:read-id`
+`DELETE /users/:user_email/history/read/:read_id`
 
 **Description**:  
 Delete a specific read history entry.
@@ -421,7 +421,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **1. Add a Diagnosis History**
 
 **Endpoint**:  
-`POST /users/:user-email/history/diagnosis`
+`POST /users/:user_email/history/diagnosis`
 
 **Description**:  
 Add a diagnosis history record.
@@ -455,7 +455,7 @@ status code: <span style="color:#03ab22;">201</span>
 #### **2. Get All Diagnosis Histories**
 
 **Endpoint**:  
-`GET /users/:user-email/history/diagnosis`
+`GET /users/:user_email/history/diagnosis`
 
 **Description**:  
 Retrieve a user's diagnosis histories.
@@ -493,7 +493,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **3. Get a Diagnosis History By ID**
 
 **Endpoint**:  
-`Get /users/:user-email/history/diagnosis/:diag-id`
+`Get /users/:user_email/history/diagnosis/:diag_id`
 
 **Description**:  
 Get a specific diagnosis history entry.
@@ -516,7 +516,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **4. Delete a diagnosis History**
 
 **Endpoint**:  
-`DELETE /users/:user-email/history/diagnosis/:diag-id`
+`DELETE /users/:user_email/history/diagnosis/:diag_id`
 
 **Description**:  
 Delete a specific diagnosis history entry.

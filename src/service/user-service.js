@@ -8,7 +8,7 @@ import admin from "firebase-admin";
 
 const signup = async (req) => {
     const user = req.body;
-
+    const userId = crypto.randomBytes(10).toString("hex");
     const usersCollection = db.collection("users");
     const userDoc = await getUserData(user.email);
     if (userDoc.email === user.email) {
@@ -17,6 +17,7 @@ const signup = async (req) => {
     const userPassword = await bcrypt.hash(user.password, 10);
 
     const userData = {
+        user_id: userId,
         name: user.name,
         age: user.age,
         email: user.email,
@@ -27,7 +28,7 @@ const signup = async (req) => {
         auth_key: "null",
         created_at: admin.firestore.Timestamp.now(),
     };
-    const result = await usersCollection.doc(user.email).set(userData);
+    const result = await usersCollection.doc(userId).set(userData);
     return result;
 };
 
@@ -47,6 +48,7 @@ const login = async (req) => {
     }
 
     const result = usersDoc.docs.map((doc) => doc.data())[0];
+
     const userData = {
         name: result.name,
         age: result.age,
@@ -54,15 +56,16 @@ const login = async (req) => {
         phone: result.phone,
         city: result.city,
         country: result.country,
+        user_id: result.user_id,
     };
     const secret_key = process.env.JWT_SECRET_KEY;
     // const expiresIn = 60 * 60 * 5;
     const expiresIn = "1d";
     const authkey = crypto.randomBytes(50).toString("hex");
-    const updatedData = await usersCollection.doc(dataLogin.email).update({
+    const updatedData = await usersCollection.doc(result.user_id).update({
         auth_key: authkey,
     });
-    const token = jwt.sign({ email: result.email, authkey }, secret_key, { expiresIn: expiresIn });
+    const token = jwt.sign({ user_id: result.user_id, authkey }, secret_key, { expiresIn: expiresIn });
     return {
         userData,
         token,
@@ -78,12 +81,12 @@ const logout = async (req) => {
 };
 
 const getUser = async (req) => {
-    const userEmail = req.params.email;
-    if (userEmail !== req.userData) {
+    const userId = req.params.user_id;
+    if (userId !== req.userData) {
         throw new ResponseError(401, "Unauthorized");
     }
     const usersCollection = db.collection("users");
-    const usersDoc = await usersCollection.where("email", "=", userEmail).get(); //query data user by email
+    const usersDoc = await usersCollection.where("user_id", "=", userId).get(); //query data user by email
     if (usersDoc.empty) {
         throw new ResponseError(404, "User not found");
     }

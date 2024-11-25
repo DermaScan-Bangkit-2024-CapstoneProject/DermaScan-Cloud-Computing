@@ -6,7 +6,7 @@ const privateRouter = new express.Router();
 
 privateRouter.use(userAuth);
 // User Endpoint
-privateRouter.get("/api/users/:email", userController.getUser);
+privateRouter.get("/api/users/:user_id", userController.getUser);
 privateRouter.post("/api/auth/update", userController.update);
 privateRouter.post("/api/auth/logout", userController.logout);
 

@@ -35,9 +35,9 @@ const getArticles = async (req) => {
 };
 
 const getArticleById = async (req) => {
-    const article_id = req.params.article_id;
+    const articleId = req.params.article_id;
     const articlesCollection = db.collection("articles");
-    const articlesDoc = await articlesCollection.where("article_id", "=", article_id).get();
+    const articlesDoc = await articlesCollection.where("article_id", "==", articleId).get();
     if (articlesDoc.empty) {
         throw new ResponseError(404, "Article not found");
     }

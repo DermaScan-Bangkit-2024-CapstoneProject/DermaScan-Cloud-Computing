@@ -16,14 +16,14 @@ const userAuth = async (req, res, next) => {
         return next(new ResponseError(401, "Unauthorized"));
     }
     const usersCollection = db.collection("users");
-    const usersDoc = await usersCollection.where("email", "=", jwtTokenDecode.email).get();
+    const usersDoc = await usersCollection.where("user_id", "=", jwtTokenDecode.user_id).get();
     if (usersDoc.empty) {
         return next(new ResponseError(401, "Unauthorized"));
     }
     if (usersDoc.docs.at(0).data().auth_key !== jwtTokenDecode.authkey) {
         return next(new ResponseError(401, "Unauthorized"));
     }
-    req.userData = jwtTokenDecode.email;
+    req.userData = jwtTokenDecode.user_id;
     next();
 };
 

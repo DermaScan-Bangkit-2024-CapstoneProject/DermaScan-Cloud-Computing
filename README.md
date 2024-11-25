@@ -78,7 +78,8 @@ status code: <span style="color:#03ab22;">200</span>
         "email": "string",
         "phone": "string",
         "city": "string",
-        "country": "string"
+        "country": "string",
+        "user_id": "string"
     },
     "token": "<jwt-token>"
 }
@@ -175,7 +176,7 @@ status code: <span style="color:#03ab22;">200</span>
 ### **6. Update User Data**
 
 **Endpoint**:  
-`PATCH /api/users/:user_email`
+`PATCH /api/users/:user_id`
 
 **Description**:  
 Update user profile data.
@@ -212,10 +213,10 @@ status code: <span style="color:#03ab22;">200</span>
 ### **7. Get User**
 
 **Endpoint**:  
-`GET /api/users/:email`
+`GET /api/users/:user_id`
 
 **Description**:  
-Retrieve user details by email.
+Retrieve user details by user id.
 
 **Headers**:
 
@@ -329,7 +330,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **1. Add Read History**
 
 **Endpoint**:  
-`POST /users/:user_email/history/read`
+`POST /users/:user_id/history/read`
 
 **Description**:  
 Add a read history record for a user.
@@ -362,7 +363,7 @@ status code: <span style="color:#03ab22;">201</span>
 #### **2. Get Read Histories**
 
 **Endpoint**:  
-`GET /users/:user_email/history/read`
+`GET /users/:user_id/history/read`
 
 **Description**:  
 Retrieve a user's read histories.
@@ -394,7 +395,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **3. Delete Read History**
 
 **Endpoint**:  
-`DELETE /users/:user_email/history/read/:read_id`
+`DELETE /users/:user_id/history/read/:read_id`
 
 **Description**:  
 Delete a specific read history entry.
@@ -421,7 +422,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **1. Add a Diagnosis History**
 
 **Endpoint**:  
-`POST /users/:user_email/history/diagnosis`
+`POST /users/:user_id/history/diagnosis`
 
 **Description**:  
 Add a diagnosis history record.
@@ -455,7 +456,7 @@ status code: <span style="color:#03ab22;">201</span>
 #### **2. Get All Diagnosis Histories**
 
 **Endpoint**:  
-`GET /users/:user_email/history/diagnosis`
+`GET /users/:user_id/history/diagnosis`
 
 **Description**:  
 Retrieve a user's diagnosis histories.
@@ -493,7 +494,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **3. Get a Diagnosis History By ID**
 
 **Endpoint**:  
-`Get /users/:user_email/history/diagnosis/:diag_id`
+`Get /users/:user_id/history/diagnosis/:diag_id`
 
 **Description**:  
 Get a specific diagnosis history entry.
@@ -516,7 +517,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **4. Delete a diagnosis History**
 
 **Endpoint**:  
-`DELETE /users/:user_email/history/diagnosis/:diag_id`
+`DELETE /users/:user_id/history/diagnosis/:diag_id`
 
 **Description**:  
 Delete a specific diagnosis history entry.

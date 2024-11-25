@@ -1,5 +1,3 @@
-import db from "../database/connect-db.js";
-
 import userService from "../service/user-service.js";
 const signup = async (req, res, next) => {
     try {

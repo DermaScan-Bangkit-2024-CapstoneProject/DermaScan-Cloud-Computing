@@ -57,7 +57,7 @@ const login = async (req) => {
     };
     const secret_key = process.env.JWT_SECRET_KEY;
     // const expiresIn = 60 * 60 * 5;
-    const expiresIn = "30m";
+    const expiresIn = "1d";
     const authkey = crypto.randomBytes(50).toString("hex");
     const updatedData = await usersCollection.doc(dataLogin.email).update({
         auth_key: authkey,

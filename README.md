@@ -245,7 +245,7 @@ status code: <span style="color:#03ab22;">200</span>
 ### **1. Get All Articles**
 
 **Endpoint**:  
-`GET /articles`
+`GET /articles?page=<number>&limit=<number>`
 
 **Description**:  
 Retrieve all articles.
@@ -260,24 +260,34 @@ Authorization: Bearer <jwt-token>
 status code: <span style="color:#03ab22;">200</span>
 
 ```json
-[
-    {
-        "articleId": "number",
-        "title": "string",
-        "theme": "string",
-        "content": "string",
-        "author:": "string",
-        "createdAt": "timestamp"
+{
+    "next": {
+        "page": "number",
+        "limit": "number"
     },
-    {
-        "articleId": "number",
-        "title": "string",
-        "theme": "string",
-        "content": "string",
-        "author:": "string",
-        "createdAt": "timestamp"
-    }
-]
+    "previous": {
+        "page": "number",
+        "limit": "number"
+    },
+    "resultDatas": [
+        {
+            "author:": "string",
+            "title": "string",
+            "content": "string",
+            "article_id": "number",
+            "theme": "string",
+            "created_at": "timestamp"
+        },
+        {
+            "author:": "string",
+            "title": "string",
+            "content": "string",
+            "article_id": "number",
+            "theme": "string",
+            "created_at": "timestamp"
+        }
+    ]
+}
 ```
 
 ---

@@ -11,8 +11,13 @@ const articles = async (req, res, next) => {
 
 const articleById = async (req, res, next) => {
     try {
-    } catch (error) {}
+        const result = await articleService.getArticleById(req);
+        res.status(200).json(result);
+    } catch (error) {
+        next(error);
+    }
 };
+
 const postArticle = async (req, res, next) => {
     try {
         const result = await articleService.postArticle(req);
@@ -21,4 +26,5 @@ const postArticle = async (req, res, next) => {
         next(error);
     }
 };
+
 export default { articles, articleById, postArticle };

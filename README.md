@@ -295,7 +295,7 @@ status code: <span style="color:#03ab22;">200</span>
 ### **2. Get Article by ID**
 
 **Endpoint**:  
-`GET /articles/:article-id`
+`GET /articles/:article_id`
 
 **Description**:  
 Retrieve an article by its ID.
@@ -311,12 +311,12 @@ status code: <span style="color:#03ab22;">200</span>
 
 ```json
 {
-    "articleId": "number",
+    "article_id": "number",
     "title": "string",
     "theme": "string",
     "content": "string",
     "author:": "string",
-    "createdAt": "timestamp"
+    "created_at": "timestamp"
 }
 ```
 
@@ -344,7 +344,7 @@ Authorization: Bearer <jwt-token>
 
 ```json
 {
-    "articleId": "number"
+    "article_id": "number"
 }
 ```
 

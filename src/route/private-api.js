@@ -12,8 +12,8 @@ privateRouter.post("/api/auth/logout", userController.logout);
 
 // Article Endpoint
 privateRouter.post("/articles", articleController.postArticle); //development purpose
+privateRouter.get("/articles/:article_id", articleController.articleById);
 privateRouter.get("/articles", articleController.articles);
-privateRouter.get("/articles/:article-id", articleController.articleById);
 
 // Diagnosis Endpoint
 

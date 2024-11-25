@@ -1,6 +1,7 @@
 import crypto from "crypto"; //development only
 import admin from "firebase-admin";
 import db from "../database/connect-db.js";
+import { ResponseError } from "../error/error.js";
 
 const getArticles = async (req) => {
     const page = parseInt(req.query.page || 1);
@@ -8,7 +9,6 @@ const getArticles = async (req) => {
     // const startIndex = (page -1) * limit;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-
     const articlesCollection = db.collection("articles");
     const articles = await articlesCollection.get();
     const datas = articles.docs.map((doc) => doc.data());
@@ -35,9 +35,15 @@ const getArticles = async (req) => {
 };
 
 const getArticleById = async (req) => {
+    const article_id = req.params.article_id;
     const articlesCollection = db.collection("articles");
-    const articlesDoc = await articlesCollection.doc(articleId).get();
-    return articlesDoc.data();
+    const articlesDoc = await articlesCollection.where("article_id", "=", article_id).get();
+    if (articlesDoc.empty) {
+        throw new ResponseError(404, "Article not found");
+    }
+    const result = articlesDoc.docs.map((doc) => doc.data());
+    result[0].created_at = new Date(result[0].created_at._seconds * 1000).toLocaleString();
+    return result[0];
 };
 
 const postArticle = async (req) => {

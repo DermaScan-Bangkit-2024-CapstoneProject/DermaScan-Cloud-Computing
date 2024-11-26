@@ -2,6 +2,7 @@ import crypto from "crypto"; //development only
 import admin from "firebase-admin";
 import db from "../database/connect-db.js";
 import { ResponseError } from "../error/error.js";
+import { getDataFromDb } from "../utils/get-data.js";
 
 const getArticles = async (req) => {
     const page = parseInt(req.query.page || 1);
@@ -38,11 +39,20 @@ const getArticleById = async (req) => {
     const articleId = req.params.article_id;
     const articlesCollection = db.collection("articles");
     const articlesDoc = await articlesCollection.where("article_id", "==", articleId).get();
+
     if (articlesDoc.empty) {
         throw new ResponseError(404, "Article not found");
     }
     const result = articlesDoc.docs.map((doc) => doc.data());
     result[0].created_at = new Date(result[0].created_at._seconds * 1000).toLocaleString();
+    const articleHistory = await getDataFromDb("read_histories", "article_id", articleId);
+    if (articleHistory) {
+        if (articleHistory.article_id === articleId) {
+            result[0].is_added_to_history = true;
+        }
+    } else {
+        result[0].is_added_to_history = false;
+    }
     return result[0];
 };
 

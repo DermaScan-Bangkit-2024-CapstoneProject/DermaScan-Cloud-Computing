@@ -246,7 +246,7 @@ status code: <span style="color:#03ab22;">200</span>
 ### **1. Get All Articles**
 
 **Endpoint**:  
-`GET /articles?page=<number>&limit=<number>`
+`GET /api/articles?page=<number>&limit=<number>`
 
 **Description**:  
 Retrieve all articles.
@@ -296,7 +296,7 @@ status code: <span style="color:#03ab22;">200</span>
 ### **2. Get Article by ID**
 
 **Endpoint**:  
-`GET /articles/:article_id`
+`GET /api/articles/:article_id`
 
 **Description**:  
 Retrieve an article by its ID.
@@ -317,7 +317,8 @@ status code: <span style="color:#03ab22;">200</span>
     "theme": "string",
     "content": "string",
     "author:": "string",
-    "created_at": "timestamp"
+    "created_at": "timestamp",
+    "is_added_to_history": "boolean"
 }
 ```
 
@@ -330,7 +331,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **1. Add Read History**
 
 **Endpoint**:  
-`POST /users/:user_id/history/read`
+`POST /api/users/:user_id/history/read`
 
 **Description**:  
 Add a read history record for a user.
@@ -363,7 +364,7 @@ status code: <span style="color:#03ab22;">201</span>
 #### **2. Get Read Histories**
 
 **Endpoint**:  
-`GET /users/:user_id/history/read`
+`GET /api/users/:user_id/history/read`
 
 **Description**:  
 Retrieve a user's read histories.
@@ -374,18 +375,18 @@ status code: <span style="color:#03ab22;">200</span>
 ```json
 [
     {
-        "email": "string",
+        "user_id": "string",
         "articleId": "number",
         "title": "string",
-        "readAt": "timestamp",
-        "readId": "string"
+        "read_id": "timestamp",
+        "read_at": "string"
     },
     {
-        "email": "string",
+        "user_id": "string",
         "articleId": "number",
         "title": "string",
-        "readAt": "timestamp",
-        "readId": "string"
+        "read_id": "timestamp",
+        "read_at": "string"
     }
 ]
 ```
@@ -395,7 +396,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **3. Delete Read History**
 
 **Endpoint**:  
-`DELETE /users/:user_id/history/read/:read_id`
+`DELETE /api/users/:user_id/history/read/:read_id`
 
 **Description**:  
 Delete a specific read history entry.
@@ -456,7 +457,7 @@ status code: <span style="color:#03ab22;">201</span>
 #### **2. Get All Diagnosis Histories**
 
 **Endpoint**:  
-`GET /users/:user_id/history/diagnosis`
+`GET /api/users/:user_id/history/diagnosis`
 
 **Description**:  
 Retrieve a user's diagnosis histories.
@@ -494,7 +495,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **3. Get a Diagnosis History By ID**
 
 **Endpoint**:  
-`Get /users/:user_id/history/diagnosis/:diag_id`
+`Get /api/users/:user_id/history/diagnosis/:diag_id`
 
 **Description**:  
 Get a specific diagnosis history entry.
@@ -517,7 +518,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **4. Delete a diagnosis History**
 
 **Endpoint**:  
-`DELETE /users/:user_id/history/diagnosis/:diag_id`
+`DELETE /api/users/:user_id/history/diagnosis/:diag_id`
 
 **Description**:  
 Delete a specific diagnosis history entry.

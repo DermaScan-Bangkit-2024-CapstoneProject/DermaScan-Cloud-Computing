@@ -26,7 +26,7 @@ const addReadHistory = async (req, res) => {
         throw new ResponseError(409, "This article has already added to your history");
     }
 
-    const result = await readHistoryCollection.doc(article.article_id).set({
+    const result = await readHistoryCollection.doc(readId).set({
         user_id: userId,
         article_id: article.article_id,
         read_id: readId,
@@ -49,6 +49,26 @@ const getReadHistory = async (req, res) => {
     result.map((data) => (data.read_at = new Date(data.read_at._seconds * 1000).toLocaleString()));
     return result;
 };
-const deleteReadHistory = async (req, res) => {};
+const deleteReadHistory = async (req, res) => {
+    const userId = req.params.user_id;
+    const articleId = req.params.read_id;
+    if (!userId || userId !== req.userData) {
+        throw new ResponseError(401, "Unauthorized");
+    }
+    if (!articleId) {
+        throw new ResponseError(400, "Bad Request, specify article to delete");
+    }
+
+    const readHistoryCollection = db.collection("read_histories");
+    const readHistoryData = await getDataFromDb("read_histories", "read_id", articleId);
+    if (!readHistoryData) {
+        throw new ResponseError(404, "Read History not found");
+    }
+    if (readHistoryData.user_id !== userId) {
+        throw new ResponseError(401, "Unauthorized");
+    }
+    const result = await readHistoryCollection.doc(articleId).delete();
+    return result;
+};
 
 export default { addReadHistory, getReadHistory, deleteReadHistory };

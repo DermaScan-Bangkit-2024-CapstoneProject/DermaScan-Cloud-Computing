@@ -16,6 +16,15 @@ const getReadHistory = async (req, res, next) => {
         next(error);
     }
 };
-const deleteReadHistory = async (req, res) => {};
+const deleteReadHistory = async (req, res, next) => {
+    try {
+        const result = await readService.deleteReadHistory(req);
+        res.status(200).json({
+            message: "Read History deleted successfully.",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
 
 export default { addReadHistory, getReadHistory, deleteReadHistory };

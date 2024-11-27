@@ -21,12 +21,12 @@ const getDiagnosisHistories = async (req, res, next) => {
 };
 
 const getDiagnosisHistoryById = async (req, res, next) => {
-   try {
+    try {
        const result = await diagnosisService.getDiagnosisHistoryById(req);
        res.status(200).json(result);
-   } catch (error) {
+    } catch (error) {
        next(error);
-   }
+    }
 };
 
 const deleteDiagnosisHistory = async (req, res, next) => {
@@ -35,9 +35,9 @@ const deleteDiagnosisHistory = async (req, res, next) => {
        res.status(200).json({
            message: "Diagnosis history deleted successfully."
        });
-   } catch (error) {
+    } catch (error) {
        next(error);
-   }
+    }
 };
 
 export default { 

@@ -50,35 +50,35 @@ const getDiagnosisHistories = async (req) => {
 };
 
 const getDiagnosisHistoryById = async (req) => {
-   const userId = req.params.user_id;
-   const diagId = req.params.diag_id;
+    const userId = req.params.user_id;
+    const diagId = req.params.diag_id;
 
-   const userDoc = await db.collection("users").doc(userId).get();
-   if (!userDoc.exists) {
-       throw new ResponseError(404, "User not found");
-   }
+    const userDoc = await db.collection("users").doc(userId).get();
+    if (!userDoc.exists) {
+        throw new ResponseError(404, "User not found");
+    }
 
-   const diagDoc = await db.collection("diagnosis_histories").doc(diagId).get();
-   if (!diagDoc.exists) {
+    const diagDoc = await db.collection("diagnosis_histories").doc(diagId).get();
+    if (!diagDoc.exists) {
        throw new ResponseError(404, "Diagnosis history not found");
-   }
+    }
 
    return diagDoc.data();
 };
 
 const deleteDiagnosisHistory = async (req) => {
-   const userId = req.params.user_id;
-   const diagId = req.params.diag_id;
+    const userId = req.params.user_id;
+    const diagId = req.params.diag_id;
 
    const userDoc = await db.collection("users").doc(userId).get();
-   if (!userDoc.exists) {
-       throw new ResponseError(404, "User not found");
-   }
+    if (!userDoc.exists) {
+        throw new ResponseError(404, "User not found");
+    }
 
-   const diagDoc = await db.collection("diagnosis_histories").doc(diagId).get();
-   if (!diagDoc.exists) {
-       throw new ResponseError(404, "Diagnosis history not found"); 
-   }
+    const diagDoc = await db.collection("diagnosis_histories").doc(diagId).get();
+    if (!diagDoc.exists) {
+        throw new ResponseError(404, "Diagnosis history not found"); 
+    }
 
    await db.collection("diagnosis_histories").doc(diagId).delete();
 };

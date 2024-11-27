@@ -423,7 +423,7 @@ status code: <span style="color:#03ab22;">200</span>
 #### **1. Add a Diagnosis History**
 
 **Endpoint**:  
-`POST /users/:user_id/history/diagnosis`
+`POST /api/users/:user_id/history/diagnosis`
 
 **Description**:  
 Add a diagnosis history record.
@@ -474,14 +474,14 @@ status code: <span style="color:#03ab22;">200</span>
 ```json
 [
     {
-        "email": "string",
+        "userId": "string",
         "diagId": "number",
         "imagePath": "string",
         "result": "string",
         "createdAt": "timestamp"
     },
     {
-        "email": "string",
+        "userId": "string",
         "diagId": "number",
         "imagePath": "string",
         "result": "string",
@@ -511,7 +511,12 @@ status code: <span style="color:#03ab22;">200</span>
 
 ```json
 {
-    "message": "Diagnosis history has been deleted successfully."
+    "userId":"string",
+    "diagId":"number",
+    "imageUrl":"string",
+    "imagePath":"string",
+    "result":"string",
+    "createdAt": "timestamp"
 }
 ```
 
@@ -534,6 +539,6 @@ status code: <span style="color:#03ab22;">200</span>
 
 ```json
 {
-    "message": "diagnosis history deleted successfully."
+    "message": "Diagnosis history deleted successfully."
 }
 ```

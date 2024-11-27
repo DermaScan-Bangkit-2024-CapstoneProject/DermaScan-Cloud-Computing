@@ -38,23 +38,6 @@ const logout = (req, res, next) => {
 };
 
 const getUser = async (req, res, next) => {
-    // let userData = [];
-    // const usersCollection = db.collection("users");
-    // const usersDoc = await usersCollection.where("email", "=", userEmail).get(); //query data user by college
-    // if (usersDoc.empty) {
-    //     res.status(404).json({
-    //         message: "Data not found",
-    //     });
-    //     return;
-    // } else {
-    //     usersDoc.forEach((doc) => {
-    //         userData.push(doc.data());
-    //     });
-    //     res.json({
-    //         userData,
-    //     });
-    // }
-
     try {
         const userData = await userService.getUser(req);
 
@@ -64,24 +47,38 @@ const getUser = async (req, res, next) => {
     }
 };
 
-const update = async (req, res, next) => {
-    // let data = [];
+const updateUser = async (req, res, next) => {
     try {
-        //     const usersCollection = db.collection("users");
-        //     const userData = await usersCollection.doc(userEmail).update({
-        //         age: 30,
-        //     });
-        //     const updatedData = await usersCollection.where("email", "=", userEmail).get();
-        //     updatedData.forEach((doc) => {
-        //         data.push(doc.data());
-        //     });
+        const result = await userService.updateUser(req);
         res.status(200).json({
-            message: "User Successfully Updated",
-            data: req.userData,
+            message: "User data updated successfully.",
+            result,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+const resetPassword = async (req, res, next) => {
+    try {
+        const result = await userService.resetPassword(req);
+        res.status(200).json({
+            message: "Password Reset Successfully",
+            result,
         });
     } catch (error) {
         next(error);
     }
 };
 
-export default { signup, login, logout, getUser, update };
+const forgotPassword = async (req, res, next) => {
+    try {
+        const result = await userService.forgotPassword(req);
+        res.status(200).json({
+            message: "Password Reset Successfully",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export default { signup, login, logout, getUser, resetPassword, updateUser, forgotPassword };

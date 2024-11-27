@@ -1,10 +1,12 @@
 import db from "../database/connect-db.js";
 import bcrypt from "bcrypt";
 import { ResponseError } from "../error/error.js";
-import { getUserData } from "../utils/get-user-data.js";
+import { getUserData } from "../utils/get-user-by-email.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import admin from "firebase-admin";
+import { getDataFromDb } from "../utils/get-data.js";
+import { response } from "express";
 
 const signup = async (req) => {
     const user = req.body;
@@ -104,4 +106,49 @@ const getUser = async (req) => {
     return userData;
 };
 
-export default { signup, login, logout, getUser };
+const resetPassword = async (req) => {
+    const data = req.body;
+    if (data.user_id !== req.userData) {
+        throw new ResponseError(401, "Unauthorized");
+    }
+    const userData = await getDataFromDb("users", "user_id", data.user_id);
+    if (data.user_id !== userData.user_id) {
+        throw new ResponseError(404, "User not found");
+    }
+    const oldPassword = await bcrypt.compare(data.oldPassword, userData.password);
+    if (!oldPassword) {
+        throw new ResponseError(401, "Password is incorrect");
+    }
+    if (data.oldPassword === data.newPassword) {
+        throw new ResponseError(400, "New password must be different from old password");
+    }
+    const newPassword = await bcrypt.hash(data.newPassword, 10);
+    const result = await db.collection("users").doc(data.user_id).update({ password: newPassword });
+
+    return result;
+};
+
+const updateUser = async (req) => {
+    const data = req.body;
+    if (req.params.user_id !== req.userData) {
+        throw new ResponseError(401, "Unauthorized");
+    }
+    const userData = await getDataFromDb("users", "user_id", req.params.user_id);
+    if (req.userData !== userData.user_id) {
+        throw new ResponseError(404, "User not found");
+    }
+    const updatedData = {
+        name: data.name ? data.name : userData.name,
+        age: data.age ? data.age : userData.age,
+        email: data.email ? data.email : userData.email,
+        phone: data.phone ? data.phone : userData.phone,
+        city: data.city ? data.city : userData.city,
+        country: data.country ? data.country : userData.country,
+    };
+    const result = await db.collection("users").doc(userData.user_id).update(updatedData);
+    return result;
+};
+
+const forgotPassword = async (req, res, next) => {};
+
+export default { signup, login, logout, getUser, resetPassword, updateUser, forgotPassword };

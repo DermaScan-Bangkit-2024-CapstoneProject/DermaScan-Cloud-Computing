@@ -141,8 +141,11 @@ status code: <span style="color:#03ab22;">200</span>
 
 ### **5. Reset Password**
 
-**Endpoint**:  
-`PATCH /api/auth/reset-password`
+**Endpoint**:
+
+`PATCH /api/user/reset-password`
+
+<!-- `PATCH /api/users/:user_id/reset-password` -->
 
 **Description**:  
 Reset user’s password.
@@ -157,6 +160,7 @@ Authorization: Bearer <jwt-token>
 
 ```json
 {
+    "user_id": "string",
     "oldPassword": "string",
     "newPassword": "string"
 }
@@ -193,6 +197,7 @@ Authorization: Bearer <jwt-token>
 {
     "name": "string",
     "age": "number",
+    "email": "string",
     "phone": "string",
     "city": "string",
     "country": "string"

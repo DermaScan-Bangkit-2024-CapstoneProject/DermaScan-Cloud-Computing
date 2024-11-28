@@ -70,15 +70,27 @@ const resetPassword = async (req, res, next) => {
     }
 };
 
-const forgotPassword = async (req, res, next) => {
+const getTokenforgetPassword = async (req, res, next) => {
+    try {
+        const result = await userService.getTokenforgetPassword(req);
+        res.status(200).json({
+            message: "Email verification code sent successfully",
+            result,
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+const forgetPassword = async (req, res, next) => {
     try {
         const result = await userService.forgotPassword(req);
         res.status(200).json({
             message: "Password Reset Successfully",
+            result,
         });
     } catch (error) {
         next(error);
     }
 };
 
-export default { signup, login, logout, getUser, resetPassword, updateUser, forgotPassword };
+export default { signup, login, logout, getUser, resetPassword, updateUser, forgetPassword, getTokenforgetPassword };

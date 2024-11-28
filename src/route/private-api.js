@@ -13,9 +13,9 @@ privateRouter.use(userAuth);
 privateRouter.get("/api/users/:user_id", userController.getUser);
 privateRouter.patch("/api/users/:user_id", userController.updateUser);
 privateRouter.patch("/api/user/reset-password", userController.resetPassword);
-// privateRouter.post("/api/auth/update", userController.update);
 privateRouter.post("/api/auth/logout", userController.logout);
-privateRouter.post("/api/auth/forgot-password", userController.forgotPassword);
+
+
 
 // Article Endpoint
 privateRouter.post("/api/articles", articleController.postArticle); //development purpose

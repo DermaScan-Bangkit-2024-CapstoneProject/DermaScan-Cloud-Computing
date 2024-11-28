@@ -4,5 +4,6 @@ const publicRouter = new express.Router();
 
 publicRouter.post("/api/auth/signup", userController.signup);
 publicRouter.post("/api/auth/login", userController.login);
-
-export { publicRouter };
+publicRouter.post("/api/auth/forget-password", userController.getTokenforgetPassword);
+publicRouter.patch("/api/auth/forget-password", userController.forgetPassword);
+export { publicRouter};

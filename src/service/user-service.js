@@ -6,7 +6,7 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import admin from "firebase-admin";
 import { getDataFromDb } from "../utils/get-data.js";
-import { response } from "express";
+import { sendEmail } from "../utils/send-email.js";
 
 const signup = async (req) => {
     const user = req.body;
@@ -149,6 +149,57 @@ const updateUser = async (req) => {
     return result;
 };
 
-const forgotPassword = async (req, res, next) => {};
+const getTokenforgetPassword = async (req) => {
+    const { email } = req.body;
+    const getUser = await getDataFromDb("users", "email", email);
+    if (!getUser) {
+        throw new ResponseError(404, "User not found");
+    }
+    const token = crypto.randomBytes(3).toString("hex");
+    const verificationEmailStatus = await sendEmail(email, "Reset Password - Email Verification", token);
+    console.log(verificationEmailStatus);
+    const data = {
+        email: email,
+        verification_code: token,
+        created_at: admin.firestore.Timestamp.now(),
+    };
+    const result = await db.collection("email_verification").doc(email).set(data);
+    return result;
+};
 
-export default { signup, login, logout, getUser, resetPassword, updateUser, forgotPassword };
+const forgotPassword = async (req) => {
+    const { email, password, token } = req.body;
+    function isTokenExpired(time) {
+        // Convert Firestore timestamp to JavaScript Date
+        const tokenIssuedTime = new Date(time._seconds * 1000 + time._nanoseconds / 1e6);
+        // Get current time
+        const currentTime = new Date();
+        // Calculate the time difference in minutes
+        const timeDifferenceMinutes = (currentTime - tokenIssuedTime) / (1000 * 60);
+        if (timeDifferenceMinutes > 10) {
+            return true;
+        }
+        return false;
+    }
+    if (!email || !password || !token) {
+        throw new ResponseError(400, "Bad Request");
+    }
+    const emailCollection = await getDataFromDb("email_verification", "email", email);
+    if (!emailCollection) {
+        throw new ResponseError(404, "User not found");
+    }
+    const time = emailCollection.created_at;
+    if (isTokenExpired(time)) {
+        throw new ResponseError(400, "Token expired");
+    }
+    const newPassword = await bcrypt.hash(password, 10);
+    const userData = await getDataFromDb("users", "email", email);
+    const userCollection = db.collection("users");
+    const userDoc = await userCollection.doc(userData.user_id).update({
+        password: newPassword,
+    });
+    await db.collection("email_verification").doc(email).delete();
+    return userDoc;
+};
+
+export default { signup, login, logout, getUser, resetPassword, updateUser, forgotPassword, getTokenforgetPassword };

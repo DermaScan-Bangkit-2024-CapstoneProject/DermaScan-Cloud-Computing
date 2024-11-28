@@ -112,13 +112,15 @@ status code: <span style="color:#03ab22;">200</span>
 
 ---
 
-### **4. Forgot Password**
+### **4. Forget Password**
+
+##### A. Get Forget Password Token
 
 **Endpoint**:  
-`POST /api/auth/forgot-password`
+`POST /api/auth/forget-password`
 
 **Description**:  
-Send password reset email.
+Send verification token to user email.
 
 **Request Body**:
 
@@ -134,6 +136,30 @@ status code: <span style="color:#03ab22;">200</span>
 ```json
 {
     "message": "Password reset link sent to email."
+}
+```
+
+##### B. Change Forget Password
+
+**Endpoint**:  
+`PATCH /api/auth/forget-password`
+
+**Request Body**:
+
+```json
+{
+    "email": "string",
+    "token": "string",
+    "password": "string"
+}
+```
+
+**Response**:
+status code: <span style="color:#03ab22;">200</span>
+
+```json
+{
+    "message": "Password successfully reset."
 }
 ```
 
@@ -516,11 +542,11 @@ status code: <span style="color:#03ab22;">200</span>
 
 ```json
 {
-    "userId":"string",
-    "diagId":"number",
-    "imageUrl":"string",
-    "imagePath":"string",
-    "result":"string",
+    "userId": "string",
+    "diagId": "number",
+    "imageUrl": "string",
+    "imagePath": "string",
+    "result": "string",
     "createdAt": "timestamp"
 }
 ```

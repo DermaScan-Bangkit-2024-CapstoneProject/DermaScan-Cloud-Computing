@@ -74,7 +74,7 @@ const getTokenforgetPassword = async (req, res, next) => {
     try {
         const result = await userService.getTokenforgetPassword(req);
         res.status(200).json({
-            message: "Email verification code sent successfully",
+            message: "Email verification code sent successfully, wait for the code, Dont request too many times",
             result,
         });
     } catch (error) {

@@ -1,44 +1,36 @@
 import admin from "firebase-admin";
 import db from "../database/connect-db.js";
 import { ResponseError } from "../error/error.js";
-import crypto from "crypto";
+import { upload } from "../utils/image-storage-handler.js";
+import { get } from "http";
+import { getDataFromDb } from "../utils/get-data.js";
+import { CollectionGroup } from "firebase-admin/firestore";
+
 const addDiagnosisHistory = async (req) => {
-    const userId = req.params.user_id;
-    const { result } = req.body;
-    const cryptoID = crypto.randomBytes(3).toString("hex");
-    const imageFile = req.file;
-    // const imageFileName = imageFile.originalname.split(".")[0] + "_" + idImage + Date.now();
-    const imageId = `${imageFile.originalname.split(".")[0]}_${cryptoID}_${Date.now()}`;
-    const imageFileName = `${imageId}.${imageFile.originalname.split(".")[1]}`;
-    console.log(imageId);
-    console.log(imageFileName);
+    try {
+        if (req.params.user_id !== req.userData) {
+            throw new ResponseError(401, "Unauthorized");
+        }
+        const userId = req.userData;
+        const { result } = req.body;
+        const imageFile = req.file;
+        const uploadResult = await upload(imageFile, req.userData);
+        const diagId = uploadResult.id + userId;
+        const diagnosisData = {
+            userId: userId,
+            diag_Id: diagId,
+            imageUrl: uploadResult.image,
+            result: result,
+            checked_at: admin.firestore.Timestamp.now(),
+        };
 
-    // console.log(image, result);
-    const results = {
-        userId,
-        result,
-        image: imageFileName,
-    };
-
-    // const userDoc = await db.collection("users").doc(userId).get();
-    // if (!userDoc.exists) {
-    //     throw new ResponseError(404, "User not found");
-    // }
-
-    // const diagnosisData = {
-    //     userId, // Store userId instead of email
-    //     diagId: Date.now().toString(),
-    //     imageUrl: image,
-    //     imagePath: `diagnoses/${userId}/${Date.now()}`,
-    //     result,
-    //     createdAt: admin.firestore.Timestamp.now()
-    // };
-
-    // await db.collection("diagnosis_histories")
-    //     .doc(diagnosisData.diagId)
-    //     .set(diagnosisData);
-
-    return results;
+        const diagnosisCollection = db.collection("test_histories");
+        const dbResult = await diagnosisCollection.doc(diagId).set(diagnosisData);
+        // const getHistoryUser = await getDataFromDb("test_histories", "diag_Id", diagId); //testing
+        return dbResult;
+    } catch (error) {
+        throw error;
+    }
 };
 
 const getDiagnosisHistories = async (req) => {

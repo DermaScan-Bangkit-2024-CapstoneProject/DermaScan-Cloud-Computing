@@ -2,9 +2,9 @@ import diagnosisService from "../service/diagnosis-service.js";
 
 const addDiagnosisHistory = async (req, res, next) => {
     try {
-        const result = await diagnosisService.addDiagnosisHistory(req);
+        const result = await diagnosisService.addDiagnosisHistory(req, res);
         res.status(201).json({
-            message: "diagnosis history added successfully",
+            message: "Diagnosis history has successfully added.",
             result: result,
         });
     } catch (error) {

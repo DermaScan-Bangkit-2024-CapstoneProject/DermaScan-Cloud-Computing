@@ -505,18 +505,18 @@ status code: <span style="color:#03ab22;">200</span>
 ```json
 [
     {
-        "userId": "string",
-        "diagId": "number",
-        "imagePath": "string",
+        "user_id": "string",
+        "diag_id": "number",
+        "image_url": "string",
         "result": "string",
-        "createdAt": "timestamp"
+        "checked_at": "timestamp"
     },
     {
-        "userId": "string",
-        "diagId": "number",
-        "imagePath": "string",
+        "user_id": "string",
+        "diag_id": "number",
+        "image_url": "string",
         "result": "string",
-        "createdAt": "timestamp"
+        "checked_at": "timestamp"
     }
 ]
 ```
@@ -542,12 +542,11 @@ status code: <span style="color:#03ab22;">200</span>
 
 ```json
 {
-    "userId": "string",
-    "diagId": "number",
-    "imageUrl": "string",
-    "imagePath": "string",
+    "user_id": "string",
+    "diag_id": "number",
+    "image_url": "string",
     "result": "string",
-    "createdAt": "timestamp"
+    "checked_at": "timestamp"
 }
 ```
 

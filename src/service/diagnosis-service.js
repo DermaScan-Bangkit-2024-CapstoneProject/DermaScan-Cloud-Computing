@@ -17,9 +17,9 @@ const addDiagnosisHistory = async (req) => {
         const uploadResult = await upload(imageFile, req.userData);
         const diagId = uploadResult.id + userId;
         const diagnosisData = {
-            userId: userId,
+            user_id: userId,
             diag_Id: diagId,
-            imageUrl: uploadResult.image,
+            image_url: uploadResult.image,
             result: result,
             checked_at: admin.firestore.Timestamp.now(),
         };
@@ -34,23 +34,20 @@ const addDiagnosisHistory = async (req) => {
 };
 
 const getDiagnosisHistories = async (req) => {
-    const userId = req.params.user_id;
-
-    const userDoc = await db.collection("users").doc(userId).get();
-    if (!userDoc.exists) {
+    const { user_id } = req.params;
+    if (user_id !== req.userData) {
+        throw new ResponseError(401, "Unauthorized");
+    }
+    const user = await getDataFromDb("users", "user_id", user_id);
+    if (!user) {
         throw new ResponseError(404, "User not found");
     }
+    const diagCollection = db.collection("test_histories");
 
-    const diagnosisCollection = db.collection("diagnosis_histories");
-    const diagnosisQuery = await diagnosisCollection.where("userId", "==", userId).get();
-
-    return diagnosisQuery.docs.map((doc) => ({
-        userId: doc.data().userId,
-        diagId: doc.data().diagId,
-        imagePath: doc.data().imagePath,
-        result: doc.data().result,
-        createdAt: doc.data().createdAt._seconds,
-    }));
+    const diagDoc = await diagCollection.where("user_id", "==", user_id).get();
+    const results = diagDoc.docs.map((doc) => doc.data());
+    results.map((data) => (data.checked_at = new Date(data.checked_at._seconds * 1000).toLocaleString()));
+    return results;
 };
 
 const getDiagnosisHistoryById = async (req) => {

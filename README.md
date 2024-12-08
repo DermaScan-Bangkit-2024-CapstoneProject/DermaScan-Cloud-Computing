@@ -355,6 +355,56 @@ status code: <span style="color:#03ab22;">200</span>
 
 ---
 
+### **3. Get Articles by Theme**
+
+**Endpoint**:  
+`GET /api/articles/theme/:article_theme?page=<number>&limit=<number>`
+
+**Description**:  
+Retrieve an article by its Theme, theme can be either "cancer"|"others"|"skin".
+
+**Headers**:
+
+```
+Authorization: Bearer <jwt-token>
+```
+
+**Response**:
+status code: <span style="color:#03ab22;">200</span>
+
+```json
+{
+    "next": {
+        "page": "number",
+        "limit": "number"
+    },
+    "previous": {
+        "page": "number",
+        "limit": "number"
+    },
+    "resultDatas": [
+        {
+            "author:": "string",
+            "title": "string",
+            "content": "string",
+            "article_id": "number",
+            "theme": "string",
+            "created_at": "timestamp"
+        },
+        {
+            "author:": "string",
+            "title": "string",
+            "content": "string",
+            "article_id": "number",
+            "theme": "string",
+            "created_at": "timestamp"
+        }
+    ]
+}
+```
+
+---
+
 ## **<span style="color:#07e630;">User History</span>**
 
 ### **<span style="color:#03ab22;">Read History</span>**

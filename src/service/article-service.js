@@ -7,7 +7,6 @@ import { getDataFromDb } from "../utils/get-data.js";
 const getArticles = async (req) => {
     const page = parseInt(req.query.page || 1);
     const limit = parseInt(req.query.limit || 6);
-    // const startIndex = (page -1) * limit;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const articlesCollection = db.collection("articles");
@@ -56,8 +55,40 @@ const getArticleById = async (req) => {
     return result[0];
 };
 
+const getArticleByTheme = async (req) => {
+    const page = parseInt(req.query.page || 1);
+    const limit = parseInt(req.query.limit || 6);
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+    const articleTheme = req.params.article_theme;
+
+    const articlesCollection = db.collection("articles");
+    const articles = await articlesCollection.get();
+    const datas = articles.docs.map((doc) => doc.data());
+    datas.map((data) => {
+        data.created_at = new Date(data.created_at._seconds * 1000).toLocaleString();
+    });
+    const filterDatas = datas.filter((data) => data.theme === articleTheme);
+    const results = { currentPage: page };
+    const resultDatas = filterDatas.slice(startIndex, endIndex);
+    if (endIndex < datas.length) {
+        results.next = {
+            page: page + 1,
+            limit: limit,
+        };
+    }
+    if (startIndex > 0) {
+        results.previous = {
+            page: page - 1,
+            limit: limit,
+        };
+    }
+    results.resultDatas = resultDatas;
+    return results;
+};
+
+//this api is not implemented on the client
 const postArticle = async (req) => {
-    //this api is not implemented on the client
     const article = req.body;
     const id = crypto.randomBytes(10).toString("hex");
     const articleData = {
@@ -74,4 +105,4 @@ const postArticle = async (req) => {
     return result;
 };
 
-export default { getArticles, getArticleById, postArticle };
+export default { getArticles, getArticleById, getArticleByTheme, postArticle };

@@ -21,6 +21,7 @@ privateRouter.post("/api/auth/logout", userController.logout);
 // Article Endpoint
 privateRouter.post("/api/articles", articleController.postArticle); //development purpose
 privateRouter.get("/api/articles/:article_id", articleController.articleById);
+privateRouter.get("/api/articles/theme/:article_theme", articleController.articleByTheme);
 privateRouter.get("/api/articles", articleController.articles);
 
 // History

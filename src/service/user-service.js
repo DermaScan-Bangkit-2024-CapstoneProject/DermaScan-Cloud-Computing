@@ -7,9 +7,14 @@ import crypto from "crypto";
 import admin from "firebase-admin";
 import { getDataFromDb } from "../utils/get-data.js";
 import { sendEmail } from "../utils/send-email.js";
+import { userLoginValidation, userSignUpValidation, userUpdateValidation, validate } from "../utils/joi-validation.js";
 
 const signup = async (req) => {
-    const user = req.body;
+    const user = await validate(userSignUpValidation, req.body);
+    if (!user) {
+        throw new ResponseError(400, "Bad Request");
+    }
+    console.log(user);
     const userId = crypto.randomBytes(10).toString("hex");
     const usersCollection = db.collection("users");
     const userDoc = await getUserData(user.email);
@@ -35,18 +40,23 @@ const signup = async (req) => {
 };
 
 const login = async (req) => {
-    const dataLogin = req.body;
+    // const dataLogin = req.body;
+    const dataLogin = await validate(userLoginValidation, req.body);
+    if (!dataLogin) {
+        throw new ResponseError(400, "Bad Request");
+    }
+    console.log(dataLogin);
     if (!dataLogin || !dataLogin.email || !dataLogin.password) {
         throw new ResponseError(400, "Bad Request");
     }
     const usersCollection = db.collection("users");
     const usersDoc = await usersCollection.where("email", "=", dataLogin.email).get();
     if (usersDoc.empty) {
-        throw new ResponseError(404, "User not found");
+        throw new ResponseError(404, "Your email or password is incorrect");
     }
     const password = await bcrypt.compare(dataLogin.password, usersDoc.docs.at(0).data().password);
     if (!password) {
-        throw new ResponseError(401, "Unauthorized");
+        throw new ResponseError(401, "Your email or password is incorrect");
     }
 
     const result = usersDoc.docs.map((doc) => doc.data())[0];
@@ -129,7 +139,11 @@ const resetPassword = async (req) => {
 };
 
 const updateUser = async (req) => {
-    const data = req.body;
+    const data = await validate(userUpdateValidation, req.body);
+    if (!data) {
+        throw new ResponseError(400, "Bad Request");
+    }
+    console.log(data);
     if (req.params.user_id !== req.userData) {
         throw new ResponseError(401, "Unauthorized");
     }

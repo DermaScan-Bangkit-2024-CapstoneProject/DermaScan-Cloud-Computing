@@ -3,7 +3,7 @@ import userController from "../controller/user-controller.js";
 import { emailLimiter } from "../utils/rate-limiter.js";
 const publicRouter = new express.Router();
 
-publicRouter.get("/test", emailLimiter, (req, res) => res.send("Hello World!"));
+publicRouter.get("/test", emailLimiter, (req, res) => res.send("Hello World!")); //testing email limiter
 
 publicRouter.post("/api/auth/signup", userController.signup);
 publicRouter.post("/api/auth/login", userController.login);

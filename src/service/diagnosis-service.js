@@ -1,7 +1,7 @@
 import admin from "firebase-admin";
 import db from "../database/connect-db.js";
 import { ResponseError } from "../error/error.js";
-import { upload } from "../utils/image-storage-handler.js";
+import { deleteImage, upload } from "../utils/image-storage-handler.js";
 import { get } from "http";
 import { getDataFromDb } from "../utils/get-data.js";
 import { CollectionGroup } from "firebase-admin/firestore";
@@ -53,35 +53,41 @@ const getDiagnosisHistories = async (req) => {
 const getDiagnosisHistoryById = async (req) => {
     const userId = req.params.user_id;
     const diagId = req.params.diag_id;
-
-    const userDoc = await db.collection("users").doc(userId).get();
-    if (!userDoc.exists) {
-        throw new ResponseError(404, "User not found");
+    if (userId !== req.userData) {
+        throw new ResponseError(401, "Unauthorized");
     }
-
-    const diagDoc = await db.collection("diagnosis_histories").doc(diagId).get();
-    if (!diagDoc.exists) {
+    const diagnosis = await getDataFromDb("test_histories", "diag_Id", diagId);
+    if (!diagnosis) {
         throw new ResponseError(404, "Diagnosis history not found");
     }
+    if (diagnosis.user_id !== userId) {
+        throw new ResponseError(401, "Unauthorized");
+    }
+    diagnosis.checked_at = new Date(diagnosis.checked_at._seconds * 1000).toLocaleString();
 
-    return diagDoc.data();
+    return diagnosis;
 };
 
 const deleteDiagnosisHistory = async (req) => {
     const userId = req.params.user_id;
     const diagId = req.params.diag_id;
 
-    const userDoc = await db.collection("users").doc(userId).get();
-    if (!userDoc.exists) {
-        throw new ResponseError(404, "User not found");
+    if (userId !== req.userData) {
+        throw new ResponseError(401, "Unauthorized");
     }
 
-    const diagDoc = await db.collection("diagnosis_histories").doc(diagId).get();
-    if (!diagDoc.exists) {
+    const diagnosis = await getDataFromDb("test_histories", "diag_Id", diagId);
+    if (!diagnosis) {
         throw new ResponseError(404, "Diagnosis history not found");
     }
 
-    await db.collection("diagnosis_histories").doc(diagId).delete();
+    if (diagnosis.user_id !== userId) {
+        throw new ResponseError(401, "Unauthorized");
+    }
+
+    const imageDbRemoved = await deleteImage(diagnosis.image_url, diagnosis.diag_Id);
+    const diagnosisHistoryDeleted = await db.collection("test_histories").doc(diagId).delete();
+    return diagnosisHistoryDeleted;
 };
 
 export default {

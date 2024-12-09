@@ -10,7 +10,7 @@
 
 ##### Development
 ```
-https://backend-services-443516.et.r.appspot.com
+http://localhost:3000
 ```
 ##### Production
 ```

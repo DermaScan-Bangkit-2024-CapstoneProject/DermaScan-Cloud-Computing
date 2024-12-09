@@ -8,8 +8,13 @@
 
 ## **Base URL**
 
+##### Development
 ```
-https://localhost:3000
+https://backend-services-443516.et.r.appspot.com
+```
+##### Production
+```
+https://backend-services-443516.et.r.appspot.com
 ```
 
 ---

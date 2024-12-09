@@ -20,7 +20,7 @@ const sendEmail = async (receipient, subject, message) => {
     try {
         const info = transporter.sendMail({
             from: '"DermaScan Admin" <dermascan@demomailtrap.com>', // sender address
-            to: "receipient", // list of receivers
+            to: receipient, // list of receivers
             subject: subject, // Subject line
             message: message, // plain text body
             html: `<p>Please use the Token to reset your password before 10 minutes, Here is your token:</p> <b> ${message}</b>`, // html body
